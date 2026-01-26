@@ -51,8 +51,8 @@ If you build on this work, improve it, or adapt it for your own projects, you’
 Please note:
 
 - This project is provided **without formal support**
-- Issues may not receive immediate responses
-- Feature requests may not be implemented
+- Issues may not receive immediate responses (or any response)
+- Feature requests may or may not be implemented
 - Changes may be driven by my own use cases and availability  
 
 That said, respectful discussion, improvements, and pull requests are always welcome.
