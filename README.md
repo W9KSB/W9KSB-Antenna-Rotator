@@ -325,10 +325,3 @@ sudo systemctl daemon-reload
 sudo systemctl enable antenna-rotator.service
 sudo systemctl start antenna-rotator.service
 ```
-
----
-
-# ✔ Done — Full README Generated
-
-This is the complete unified README with ALL content merged.
-
