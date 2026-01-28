@@ -1,6 +1,8 @@
 
 # 🚀 Introducing the W9KSB Antenna Rotator
 
+[![Movement Demo](https://img.youtube.com/vi/zZoIDCE3QLc/hqdefault.jpg)](https://www.youtube.com/watch?v=zZoIDCE3QLc)
+
 ## About This Project (Overview)
 
 This project is not a polished commercial product. It is a real-world, homebrew build that grew out of practical needs, experimentation, and a lot of tinkering.
@@ -101,15 +103,9 @@ The software consists of several Python modules:
 
 ---
 
-# 🏗 Build Photos & Movement Video
+# 📸 Build Photos 
 
-## 🎥 Movement Demo
 
-[![Movement Demo](https://img.youtube.com/vi/zZoIDCE3QLc/hqdefault.jpg)](https://www.youtube.com/watch?v=zZoIDCE3QLc)
-
----
-
-## 📸 Build Photos
 
 ### Tripod Mount
 
