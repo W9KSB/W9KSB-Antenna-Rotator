@@ -144,7 +144,7 @@ The software consists of several Python modules:
 
 | Product | Qty | Price | Link |
 |--------|-----|--------|------|
-| Worm gear motors | 2 | — | — |
+| Worm gear motors | 2 | $9.37 | https://www.aliexpress.us/item/3256808839154120.html |
 | Hyper Hub 1310 (6mm) | 2 | $7.99 | https://www.servocity.com/1310-series-hyper-hub-6mm-d-bore/ |
 | Roller bearing | 1 | $7.98 | https://amzn.to/4r6E8D8 |
 | Heat-set inserts | 1 | $15.99 | https://amzn.to/460NZ5c |
