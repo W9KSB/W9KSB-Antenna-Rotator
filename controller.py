@@ -7,6 +7,8 @@ import config
 import position
 import movement
 
+from Adafruit_MotorHAT import Adafruit_MotorHAT
+
 
 def clamp(x, lo, hi):
     return max(lo, min(hi, float(x)))
@@ -61,10 +63,8 @@ class RotatorController:
             _ = position.stable_read_wrapped(self.enc_el, seconds=0.25)
 
             # -----------------------------
-            # AUTO-ZERO AZ ON STARTUP (NEW)
+            # AUTO-ZERO AZ ON STARTUP
             # -----------------------------
-            # Wherever AZ is right now becomes AZ=0.00 for this run.
-            # Elevation offset is NOT touched.
             cur_az_unwrapped = position.stable_read_unwrapped(self.az_tracker, seconds=0.25)
             self.cal["az_offset_deg"] = cur_az_unwrapped % 360.0
             # NOTE: not writing to rotator_cal.json on purpose (session-only)
@@ -107,7 +107,6 @@ class RotatorController:
         movement.stop_motor(self.motor_el)
 
     def set_target(self, az_deg, el_deg):
-        # Elevation clamped per your normal controller rules
         az = float(az_deg) % 360.0
         el = clamp(el_deg, config.EL_MIN_DEG, config.EL_MAX_DEG)
         with self._lock:
@@ -122,9 +121,6 @@ class RotatorController:
             return (float(self._cur_az_phys), float(self._cur_el_phys))
 
     def set_az_home_here(self):
-        """
-        Optional manual call if you want to persist AZ=0 to disk.
-        """
         cur_unwrapped = position.stable_read_unwrapped(self.az_tracker, seconds=0.25)
         self.cal["az_offset_deg"] = cur_unwrapped % 360.0
         config.save_cal(self.cal)
@@ -139,17 +135,40 @@ class RotatorController:
     # ---------------------------
 
     def _update_current_position(self):
-        # Az
         az_unwrapped = self.az_tracker.read()
         az_phys = position.az_unwrapped_to_physical(az_unwrapped, self.cal["az_offset_deg"])
 
-        # El
         el_raw = self.enc_el.read_degrees_filtered()
         el_phys = position.el_raw_to_physical(el_raw, self.cal["el_offset_deg"])
 
         with self._lock:
             self._cur_az_phys = az_phys % 360.0
             self._cur_el_phys = el_phys
+
+    def _el_up_speed_for_current_elevation(self, cur_el_phys: float) -> int:
+        b1 = float(getattr(config, "EL_UP_BREAK_1_DEG", 25.0))
+        b2 = float(getattr(config, "EL_UP_BREAK_2_DEG", 45.0))
+
+        s0 = int(clamp(getattr(config, "EL_UP_SPEED_0_25", 140), 0, 255))
+        s1 = int(clamp(getattr(config, "EL_UP_SPEED_25_45", 100), 0, 255))
+        s2 = int(clamp(getattr(config, "EL_UP_SPEED_45_MAX", 80), 0, 255))
+
+        if cur_el_phys < b1:
+            return s0
+        elif cur_el_phys < b2:
+            return s1
+        else:
+            return s2
+
+    def _drive_el_up_scheduled_speed(self, cur_el_phys: float):
+        """
+        Elevation UP only: scheduled speed based on current elevation.
+        Direction uses config.M2_FORWARD_SIGN.
+        """
+        spd = self._el_up_speed_for_current_elevation(cur_el_phys)
+        direction = Adafruit_MotorHAT.FORWARD if int(config.M2_FORWARD_SIGN) >= 0 else Adafruit_MotorHAT.BACKWARD
+        self.motor_el.setSpeed(spd)
+        self.motor_el.run(direction)
 
     def _loop(self):
         period = 1.0 / float(config.CONTROL_HZ)
@@ -164,7 +183,6 @@ class RotatorController:
                     target_el = self._target_el
                     stop_req = self._stop_requested
                     arrived_reported = self._arrived_reported
-                    last_arrival_target = self._last_arrival_target
 
                 if stop_req or (target_az is None and target_el is None):
                     movement.stop_motor(self.motor_az)
@@ -216,8 +234,13 @@ class RotatorController:
                         elif (cur_el_phys >= config.EL_MAX_DEG - config.DEADBAND_DEG) and (el_err > 0):
                             movement.stop_motor(self.motor_el)
                         else:
-                            movement.drive_toward_error(self.motor_el, config.M2_FORWARD_SIGN, el_err)
+                            # NEW: EL UP uses scheduled fixed speeds by elevation
+                            if el_err > 0:
+                                self._drive_el_up_scheduled_speed(cur_el_phys)
+                            else:
+                                movement.drive_toward_error(self.motor_el, config.M2_FORWARD_SIGN, el_err)
 
+                        # AZ unchanged
                         movement.drive_toward_error(self.motor_az, config.M1_FORWARD_SIGN, az_err)
 
             except Exception:
