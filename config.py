@@ -40,7 +40,15 @@ CREEP_SPEED = 70
 
 SLOW_WINDOW_DEG  = 10.0
 CREEP_WINDOW_DEG = 2.5
-DEADBAND_DEG     = 0.6
+DEADBAND_DEG     = 1
+
+# Elevation UP (lifting) speed schedule by *current elevation*
+EL_UP_SPEED_0_25   = 140
+EL_UP_SPEED_25_45  = 100
+EL_UP_SPEED_45_MAX = 80
+
+EL_UP_BREAK_1_DEG = 25.0
+EL_UP_BREAK_2_DEG = 45.0
 
 # ----------------------------
 # Calibration storage
