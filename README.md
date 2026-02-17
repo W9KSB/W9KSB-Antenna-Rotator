@@ -3,6 +3,8 @@
 
 [![Movement Demo](https://img.youtube.com/vi/zZoIDCE3QLc/hqdefault.jpg)](https://www.youtube.com/watch?v=zZoIDCE3QLc)
 
+(Video Above, Click to Play)
+
 ## About This Project (Overview)
 
 This project is not a polished commercial product. It is a real-world, homebrew build that grew out of practical needs, experimentation, and a lot of tinkering.
