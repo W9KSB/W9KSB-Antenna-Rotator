@@ -178,6 +178,7 @@ The software consists of several Python modules:
 | SMA cable | 1 | $6.99 | https://amzn.to/45tG7sN |
 | SMA bulkhead | 1 | $5.98 | https://amzn.to/49TQMhJ |
 
+*These are the parts I ordered and used. Links below are affiliate links and I may earn a small commission on the sale at no additional cost to you.*
 ---
 
 # 🧠 Software Architecture Deep Dive
