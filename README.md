@@ -7,7 +7,7 @@
 
 ## About This Project (Overview)
 
-This project is not a polished commercial product. It is a real-world, homebrew build that grew out of practical needs, experimentation, and a lot of tinkering.
+This project is not a polished commercial product. It is a real-world, homebrew build that grew out of practical needs, experimentation, and a lot of tinkering. This project is provided for educational and hobby purposes only. Use at your own risk. I am not responsible for any damage resulting from construction or use.
 
 The W9KSB Antenna Rotator exists because I wanted a reliable way to automate satellite tracking and reception from home without expensive commercial hardware. Along the way, the project evolved through trial, error, discussion, and learning — exactly how most good DIY projects do.
 
